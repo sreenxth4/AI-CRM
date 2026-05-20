@@ -139,7 +139,7 @@ Return STRICT JSON:
 Rules:
 - Extract ALL fields present in the conversation.
 - If no specific date is mentioned, use today's date: {today}
-- sentiment MUST be one of: positive, negative, neutral, lukewarm (mandatory - infer from tone if needed)
+- sentiment MUST be one of: positive, negative, neutral (mandatory - infer from tone if needed)
 - interaction_date MUST be filled (use {today} if not specified)
 - Use empty strings only for optional fields (attendees, samples_distributed, outcomes)
 - Do NOT fabricate information not in the conversation, EXCEPT date (use today) and sentiment (infer tone)
@@ -239,13 +239,13 @@ User correction:
 
 Your task:
 1. Identify which fields the user wants to change
-2. For "sentiment was X" - extract sentiment value (positive, negative, neutral, lukewarm)
+2. For "sentiment was X" - extract sentiment value (positive, negative, neutral ONLY)
 3. For date corrections - extract new date
 4. Return STRICT JSON with ONLY the fields to update (no empty fields)
 5. If field is mentioned but empty, still include it in the JSON
 
 Examples:
-- "sentiment was lukewarm" → {{"sentiment": "lukewarm"}}
+- "sentiment was positive" → {{"sentiment": "positive"}}
 - "date was yesterday" → {{"interaction_date": "<yesterday's date>"}}
 - "correction: Dr. Jones not Dr. Smith" → {{"hcp_name": "Dr. Jones"}}
 

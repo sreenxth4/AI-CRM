@@ -132,7 +132,7 @@ function FormSelect({ label, value, options, fieldKey = null, onChangeField = nu
 
 function FormSentimentRadio({ value, fieldKey = null, onChangeField = null }) {
   const isEditable = fieldKey && onChangeField;
-  const sentiments = ['Positive', 'Neutral', 'Negative', 'Lukewarm'];
+  const sentiments = ['Positive', 'Neutral', 'Negative'];
 
   return (
     <>
@@ -184,6 +184,16 @@ function FollowUpToggle({ checked, fieldKey = null, onChangeField = null }) {
     </label>
   );
 }
+
+function AIFollowupSuggestions({ suggestions }) {
+  if (!suggestions) return null;
+
+  let items;
+  try {
+    items = typeof suggestions === 'string' ? JSON.parse(suggestions) : suggestions;
+  } catch {
+    return null;
+  }
 
   if (!items.length) return null;
 
