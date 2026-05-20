@@ -137,9 +137,12 @@ Return STRICT JSON:
 }}
 
 Rules:
-- Use empty strings or false when the information is missing.
-- Do NOT infer or fabricate missing information.
-- Today is {today}. Only use it if a date is explicitly stated.
+- Extract ALL fields present in the conversation.
+- If no specific date is mentioned, use today's date: {today}
+- sentiment MUST be one of: positive, negative, neutral, lukewarm (mandatory - infer from tone if needed)
+- interaction_date MUST be filled (use {today} if not specified)
+- Use empty strings only for optional fields (attendees, samples_distributed, outcomes)
+- Do NOT fabricate information not in the conversation, EXCEPT date (use today) and sentiment (infer tone)
 
 Conversation:
 {user_input}
@@ -183,8 +186,7 @@ Conversation:
         for field_name, value in extracted.items():
             if value is None:
                 continue
-            if isinstance(value, str) and not value.strip():
-                continue
+            # Don't skip empty strings - they're valid (user didn't provide data)
             setattr(interaction, field_name, value)
 
         db.add(interaction)
@@ -233,8 +235,19 @@ def edit_interaction(interaction_id: int, correction_text: str) -> dict:
 User correction:
 {correction_text}
 
-Identify ONLY changed fields. Return STRICT JSON with only fields to update.
-If no changes are needed, return {{}}.
+Your task:
+1. Identify which fields the user wants to change
+2. For "sentiment was X" - extract sentiment value (positive, negative, neutral, lukewarm)
+3. For date corrections - extract new date
+4. Return STRICT JSON with ONLY the fields to update (no empty fields)
+5. If field is mentioned but empty, still include it in the JSON
+
+Examples:
+- "sentiment was lukewarm" → {{"sentiment": "lukewarm"}}
+- "date was yesterday" → {{"interaction_date": "<yesterday's date>"}}
+- "correction: Dr. Jones not Dr. Smith" → {{"hcp_name": "Dr. Jones"}}
+
+Return only valid JSON with fields to update.
 """
 
         try:
