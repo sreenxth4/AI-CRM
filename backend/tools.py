@@ -186,7 +186,9 @@ Conversation:
         for field_name, value in extracted.items():
             if value is None:
                 continue
-            # Don't skip empty strings - they're valid (user didn't provide data)
+            # Normalize sentiment to capitalized form (frontend expects: Positive, Neutral, Negative, Lukewarm)
+            if field_name == 'sentiment' and value:
+                value = value.capitalize()
             setattr(interaction, field_name, value)
 
         db.add(interaction)
@@ -293,6 +295,9 @@ Return only valid JSON with fields to update.
         activity = []
 
         for field_name, value in changes.items():
+            # Normalize sentiment to capitalized form
+            if field_name == 'sentiment' and value:
+                value = value.capitalize()
             setattr(interaction, field_name, value)
             changed_fields[field_name] = value
             label = field_name.replace("_", " ").title()

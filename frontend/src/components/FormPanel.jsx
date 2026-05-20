@@ -130,6 +130,43 @@ function FormSelect({ label, value, options, fieldKey = null, onChangeField = nu
   );
 }
 
+function FormSentimentRadio({ value, fieldKey = null, onChangeField = null }) {
+  const isEditable = fieldKey && onChangeField;
+  const sentiments = ['Positive', 'Neutral', 'Negative', 'Lukewarm'];
+
+  return (
+    <>
+      <FieldLabel>Observed/Inferred HCP Sentiment</FieldLabel>
+      <div className="flex gap-4 flex-wrap">
+        {sentiments.map((option) => (
+          <label
+            key={option}
+            className="flex items-center gap-2 text-sm cursor-pointer"
+            style={{ color: 'var(--color-text-secondary)', opacity: isEditable ? 1 : 0.6 }}
+          >
+            <input
+              type="radio"
+              name="sentiment"
+              value={option}
+              checked={value === option}
+              onChange={(e) => isEditable && onChangeField(fieldKey, e.target.value)}
+              disabled={!isEditable}
+              className="w-4 h-4"
+            />
+            <span className="px-2 py-1 rounded text-xs font-medium"
+              style={{
+                background: value === option ? 'var(--color-primary-light)' : 'transparent',
+                color: value === option ? 'var(--color-primary)' : 'var(--color-text-secondary)',
+              }}>
+              {option}
+            </span>
+          </label>
+        ))}
+      </div>
+    </>
+  );
+}
+
 function FollowUpToggle({ checked, fieldKey = null, onChangeField = null }) {
   const isEditable = fieldKey && onChangeField;
   
@@ -147,16 +184,6 @@ function FollowUpToggle({ checked, fieldKey = null, onChangeField = null }) {
     </label>
   );
 }
-
-function AIFollowupSuggestions({ suggestions }) {
-  if (!suggestions) return null;
-
-  let items;
-  try {
-    items = typeof suggestions === 'string' ? JSON.parse(suggestions) : suggestions;
-  } catch {
-    return null;
-  }
 
   if (!items.length) return null;
 
@@ -356,15 +383,8 @@ export default function FormPanel() {
 
           <div className="space-y-3">
             <FieldHighlight isUpdated={isUpdated('sentiment')}>
-              <FormSelect
-                label="Observed/Inferred HCP Sentiment"
+              <FormSentimentRadio
                 value={formData.sentiment}
-                options={[
-                  { value: '', label: 'Select sentiment' },
-                  { value: 'Positive', label: 'Positive' },
-                  { value: 'Neutral', label: 'Neutral' },
-                  { value: 'Negative', label: 'Negative' },
-                ]}
                 fieldKey="sentiment"
                 onChangeField={handleFieldChange}
               />
