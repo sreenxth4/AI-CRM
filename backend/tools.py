@@ -247,17 +247,34 @@ User correction:
 
 Your task:
 1. Identify which fields the user wants to change
-2. For "sentiment was X" - extract sentiment value (positive, negative, neutral ONLY)
-3. For date corrections - extract new date
+2. For sentiment corrections, ALWAYS map to ONE of these: "positive", "negative", "neutral"
+   - If user says "lukewarm" or "ambivalent" or "so-so" → map to "neutral"
+   - If user says "interested" or "very interested" → map to "positive"
+   - If user says "not interested" or "closed" → map to "negative"
+3. For date corrections - extract new date in YYYY-MM-DD format
 4. Return STRICT JSON with ONLY the fields to update (no empty fields)
-5. If field is mentioned but empty, still include it in the JSON
+
+CRITICAL: Only return JSON. No explanations. No markdown. Just raw JSON.
+
+Sentiment mapping rules:
+- lukewarm → neutral
+- ambivalent → neutral
+- so-so → neutral
+- interested → positive
+- good → positive
+- positive → positive
+- not interested → negative
+- closed → negative
+- bad → negative
+- negative → negative
 
 Examples:
-- "sentiment was positive" → {{"sentiment": "positive"}}
-- "date was yesterday" → {{"interaction_date": "<yesterday's date>"}}
-- "correction: Dr. Jones not Dr. Smith" → {{"hcp_name": "Dr. Jones"}}
+- "sentiment was lukewarm" → {{"sentiment": "neutral"}}
+- "actually she was very interested" → {{"sentiment": "positive"}}
+- "he wasn't interested" → {{"sentiment": "negative"}}
+- "date was May 15" → {{"interaction_date": "2026-05-15"}}
 
-Return only valid JSON with fields to update.
+Return ONLY the JSON object with fields to update.
 """
 
         try:
