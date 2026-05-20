@@ -45,6 +45,6 @@ class ChatResponse(BaseModel):
     reply: str
     tool_used: Optional[str] = None
     interaction_id: Optional[int] = None
-    updated_fields: Optional[UpdatedFields] = None
+    updated_fields: Optional[dict] = None
     confidence: Optional[float] = None
     activity_log: Optional[list[str]] = None

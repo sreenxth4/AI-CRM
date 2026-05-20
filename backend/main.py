@@ -93,7 +93,7 @@ def chat(request: ChatRequest):
             reply=result["reply"],
             tool_used=result.get("tool_used"),
             interaction_id=result.get("interaction_id"),
-            updated_fields=updated,
+            updated_fields=updated.model_dump() if updated else None,
             confidence=result.get("confidence"),
             activity_log=result.get("activity_log"),
         )
