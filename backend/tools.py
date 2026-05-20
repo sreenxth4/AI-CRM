@@ -139,10 +139,10 @@ Return STRICT JSON:
 Rules:
 - Extract ALL fields present in the conversation
 - If no specific date mentioned, use today: {today}
-- sentiment MUST be EXACTLY ONE of: "positive", "negative", "neutral" (lowercase)
-  * "positive": HCP shows interest, enthusiasm, openness (e.g., "very interested", "great feedback", "lukewarm but open")
-  * "negative": HCP shows resistance, skepticism, disinterest (e.g., "not interested", "closed", "dismissive")
-  * "neutral": HCP shows neither interest nor resistance (e.g., "okay", "no opinion", "lukewarm")
+- sentiment MUST be EXACTLY ONE of: "Positive", "Negative", "Neutral" (capitalized)
+  * "Positive": HCP shows interest, enthusiasm, openness (e.g., "very interested", "great feedback", "lukewarm but open")
+  * "Negative": HCP shows resistance, skepticism, disinterest (e.g., "not interested", "closed", "dismissive")
+  * "Neutral": HCP shows neither interest nor resistance (e.g., "okay", "no opinion", "lukewarm")
 - Sentiment is MANDATORY - always infer from tone, language, and context clues
 - For dates: use {today} if not specified, MUST be in YYYY-MM-DD format
 - Use empty strings ONLY for truly optional fields
@@ -244,10 +244,10 @@ YOUR TASK:
 1. Identify WHICH fields the user is correcting
 2. For sentiment corrections:
    - Analyze the user's language to determine actual sentiment
-   - Return sentiment as EXACTLY: "positive", "negative", or "neutral" (lowercase)
-   - "positive": interest, enthusiasm, openness (e.g., "interested", "great", "open-minded")
-   - "negative": resistance, skepticism, refusal (e.g., "not interested", "closed", "won't consider")
-   - "neutral": neither interest nor resistance (e.g., "lukewarm", "maybe", "uncertain", "no opinion")
+   - Return sentiment as EXACTLY: "Positive", "Negative", or "Neutral" (capitalized)
+   - "Positive": interest, enthusiasm, openness (e.g., "interested", "great", "open-minded")
+   - "Negative": resistance, skepticism, refusal (e.g., "not interested", "closed", "won't consider")
+   - "Neutral": neither interest nor resistance (e.g., "lukewarm", "maybe", "uncertain", "no opinion")
 3. For date corrections:
    - Parse the date user mentions and convert to YYYY-MM-DD format
    - If year not specified, assume current year (2026)
@@ -259,10 +259,10 @@ YOUR TASK:
 RETURN STRICT JSON - ONLY. No explanations. No code blocks. Just raw JSON object.
 
 Examples:
-- User: "Actually the sentiment was neutral" → {{"sentiment": "neutral"}}
-- User: "He was lukewarm about it" → {{"sentiment": "neutral"}}
-- User: "She was very interested" → {{"sentiment": "positive"}}
-- User: "He said no immediately" → {{"sentiment": "negative"}}
+- User: "Actually the sentiment was Neutral" → {{"sentiment": "Neutral"}}
+- User: "He was lukewarm about it" → {{"sentiment": "Neutral"}}
+- User: "She was very interested" → {{"sentiment": "Positive"}}
+- User: "He said no immediately" → {{"sentiment": "Negative"}}
 - User: "The meeting was on May 15" → {{"interaction_date": "2026-05-15"}}
 - User: "We discussed CardioX, not CardioY" → {{"product_discussed": "CardioX"}}
 

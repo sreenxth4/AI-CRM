@@ -370,8 +370,6 @@ This project **fully satisfies** every technical requirement:
 - ✅ **Google Inter font** — Applied throughout UI
 - ✅ **No hardcoded logic** — All reasoning from LLM via tools
 
-**See `REQUIREMENTS_VALIDATION.md` for detailed evidence of each requirement.**
-
 ---
 
 ## 🏆 This Stands Out Because
