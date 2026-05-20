@@ -186,9 +186,17 @@ Conversation:
         for field_name, value in extracted.items():
             if value is None:
                 continue
-            # Normalize sentiment to capitalized form (frontend expects: Positive, Neutral, Negative, Lukewarm)
+            # Normalize sentiment to allowed values: Positive, Neutral, Negative
             if field_name == 'sentiment' and value:
-                value = value.capitalize()
+                value_lower = value.lower().strip()
+                # Map variations to allowed values
+                if 'positive' in value_lower or 'interested' in value_lower or 'good' in value_lower:
+                    value = 'Positive'
+                elif 'negative' in value_lower or 'uninterested' in value_lower or 'bad' in value_lower or 'closed' in value_lower:
+                    value = 'Negative'
+                else:
+                    # Default lukewarm, neutral, ambiguous → Neutral
+                    value = 'Neutral'
             setattr(interaction, field_name, value)
 
         db.add(interaction)
@@ -295,9 +303,17 @@ Return only valid JSON with fields to update.
         activity = []
 
         for field_name, value in changes.items():
-            # Normalize sentiment to capitalized form
+            # Normalize sentiment to allowed values: Positive, Neutral, Negative
             if field_name == 'sentiment' and value:
-                value = value.capitalize()
+                value_lower = value.lower().strip()
+                # Map variations to allowed values
+                if 'positive' in value_lower or 'interested' in value_lower or 'good' in value_lower:
+                    value = 'Positive'
+                elif 'negative' in value_lower or 'uninterested' in value_lower or 'bad' in value_lower or 'closed' in value_lower:
+                    value = 'Negative'
+                else:
+                    # Default lukewarm, neutral, ambiguous → Neutral
+                    value = 'Neutral'
             setattr(interaction, field_name, value)
             changed_fields[field_name] = value
             label = field_name.replace("_", " ").title()
